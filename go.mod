@@ -1,3 +1,3 @@
-module github.com/KennyZ69/local-git-stats
+module github.com/KennyZ69/gitlocalstats
 
 go 1.24.4

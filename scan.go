@@ -1,6 +1,7 @@
 package gitlocalstats
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -28,26 +29,27 @@ func scanGitFolders(dirs []string, dir string) []string {
 	}
 
 	files, err := f.Readdir(-1)
+	f.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
-	f.Close()
 
 	var path string
 
 	for _, file := range files {
 		if file.IsDir() {
 			path = dir + "/" + file.Name()
+			if file.Name() == "vendor" || file.Name() == "node_modules" {
+				continue
+			}
+			if file.Name() == ".git" {
+				path = strings.TrimSuffix(path, "/.git")
+				fmt.Println("Found:", path)
+				dirs = append(dirs, path)
+				continue
+			}
+			dirs = scanGitFolders(dirs, path)
 		}
-		if file.Name() == "vendor" || file.Name() == "node_modules" {
-			continue
-		}
-		if file.Name() == ".git" {
-			path = strings.TrimSuffix(path, "/.git")
-			dirs = append(dirs, path)
-			continue
-		}
-		dirs = scanGitFolders(dirs, path)
 	}
 
 	return dirs

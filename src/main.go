@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	gitst "github.com/KennyZ69/gitlocalstats"
+	gitlocalstats "github.com/KennyZ69/gitlocalstats"
 )
 
 var (
@@ -16,7 +16,7 @@ func main() {
 	flag.Parse()
 
 	if *dir_flag != "" {
-		gitst.Scan(*dir_flag)
+		gitlocalstats.Scan(*dir_flag)
 		return
 	}
 

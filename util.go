@@ -26,7 +26,7 @@ func addRepos(path string, news []string) {
 }
 
 func openFile(path string) *os.File {
-	f, err := os.Open(path)
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_RDWR, 0755)
 	if err != nil {
 		if os.IsNotExist(err) {
 			_, err := os.Create(path)
@@ -36,6 +36,7 @@ func openFile(path string) *os.File {
 		} else {
 			log.Fatal(err)
 		}
+		// log.Fatal(err)
 	}
 
 	return f
@@ -68,7 +69,7 @@ func sliceContains[T comparable](slice []T, x T) bool {
 }
 
 // Generic function to join two slices or arrays
-func joinSlice[T []any](a, b T) T {
+func joinSlice[T comparable](a, b []T) []T {
 	for _, v := range b {
 		if !sliceContains(a, v) {
 			a = append(a, v)
